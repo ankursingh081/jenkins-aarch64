@@ -1,4 +1,3 @@
-#FROM aarch64/openjdk:8-jdk
 FROM aarch64/ubuntu
 RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
 
@@ -45,7 +44,6 @@ ARG JENKINS_VERSION
 ENV JENKINS_VERSION ${JENKINS_VERSION:-2.235.5}
 
 # jenkins.war checksum, download will be validated using it
-#ARG JENKINS_SHA=ea61a4ff86f0db715511d1118a4e2f0a6a0311a1
 ARG JENKINS_SHA=729c99f619fdd0472e4d48a919ed4c4a24293ade
 # Can be used to customize where jenkins.war get downloaded from
 ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
@@ -65,12 +63,7 @@ EXPOSE 8080
 EXPOSE 50000
 
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
-
-#USER ${user}
-#ENV JENKINS_PREFIX /jenkins
-#ENV JENKINS_ARGS '--webroot=/var/cache/jenkins/war --httpPort=8080 --ajp13Port=-1 --prefix=$JENKINS_PREFIX'
-
-
+ENV JENKINS_OPTS="--prefix=/jenkins"
 ENV JENKINS_OPTS="--prefix=/jenkins"
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY  jenkins.sh /usr/local/bin/jenkins.sh
